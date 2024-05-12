@@ -1,6 +1,7 @@
 import '../css/style.css'
 import { Actor, Engine, Vector, DisplayMode } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
+import { Cat } from './cat.js'
 
 export class Game extends Engine {
 
@@ -14,6 +15,10 @@ export class Game extends Engine {
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
+    killClickHandler(actor) {
+        actor.kill()
+    }
+
     startGame() {
         console.log("start de game!")
         const fish = new Actor()
@@ -21,6 +26,13 @@ export class Game extends Engine {
         fish.pos = new Vector(400, 300)
         fish.vel = new Vector(-10,0)
         this.add(fish)
+
+        for (let i = 0; i < 5; i++) {
+            const cat = new Cat()
+            this.add(cat)
+            cat.on('pointerdown', () => this.killClickHandler(cat));
+        }
+
     }
 }
 
