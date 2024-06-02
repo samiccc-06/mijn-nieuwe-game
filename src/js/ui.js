@@ -13,6 +13,10 @@ export class UI extends Actor {
         this.livesLabel.text = `lives ${lives}`;
     }
 
+    updateWave(wave) {
+        this.waveLabel.text = `wave ${wave}`;
+    }
+
     updateDoor(doorScore) {
         this.doorScoreLabel.text = `${doorScore} PUNTEN`;
     }
@@ -24,7 +28,7 @@ export class UI extends Actor {
     onInitialize(engine) {
         this.scoreLabel = new Label({
             text: 'score 0',
-            pos: new Vector((engine.drawWidth / 2) - 100, 25),
+            pos: new Vector((engine.drawWidth / 2) - 350, 25),
             font: new Font({
                 size: 30,
                 color: Color.White
@@ -32,7 +36,15 @@ export class UI extends Actor {
         });
         this.livesLabel = new Label({
             text: 'lives 3',
-            pos: new Vector((engine.drawWidth / 2) + 100, 25),
+            pos: new Vector((engine.drawWidth / 2) + 50, 25),
+            font: new Font({
+                size: 30,
+                color: Color.White
+            }),
+        });
+        this.waveLabel = new Label({
+            text: 'wave 1',
+            pos: new Vector((engine.drawWidth / 2) - 150, 25),
             font: new Font({
                 size: 30,
                 color: Color.White
@@ -48,6 +60,7 @@ export class UI extends Actor {
         });
         engine.add(this.scoreLabel);
         engine.add(this.livesLabel);
+        engine.add(this.waveLabel);
         engine.add(this.doorScoreLabel);
     }
 }

@@ -6,38 +6,36 @@ import { Bullet } from "./bullet.js"
 import { Ladder } from "./ladder.js";
 import { Door } from './door.js'
 
-let lives = 3
-
 export class Player extends Actor {
 
-    constructor() {
+    constructor(game, x, y) {
         super({
+            x: x, 
+            y: y,
             width: 90,
             height: 120
         })
+        this.game = game;
         this.body.collisionType = CollisionType.Active
         this.direction = new Vector(1, 0);
         this.isOnGround = false;
-
     }
 
     onInitialize(engine) {
         this.graphics.use(Resources.Player1.toSprite())
-        this.pos = new Vector(240, 520)
         this.vel = new Vector(-10, 0)
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.on('collisionstart', (event) => this.hitSomething(event))
         this.on('collisionend', (event) => this.leaveSomething(event));
+        const gun = new Gun(40, 30, this.gunDirection);
+        this.addChild(gun);
     }
 
     hitSomething(event) {
-        if (event.other instanceof Enemy1) {
-            lives -= 1;
-            this.scene?.engine.addLives(lives);
-            console.log(`the player hits the enemy, player has ${lives} lives now`)
-            if (lives === 0) {
-                this.kill()
-            }
+        const other = event.other;
+        if (other instanceof Enemy1) {
+            const livesLost = 1
+            this.scene.addLives(livesLost);
         }
         if (event.other instanceof Ground1) {
             this.isOnGround = true;
@@ -47,10 +45,10 @@ export class Player extends Actor {
         }
         if (event.other instanceof Door) {
             console.log("the player hits the door")
-            if (this.scene?.engine.score >= this.scene?.engine.door) {
+            if (this.scene.score >= this.scene.door) {
                 event.other.kill();
             } else {
-                this.scene?.engine.yesDoor();   
+                this.scene.yesDoor();   
             }
         }
     }
@@ -64,7 +62,7 @@ export class Player extends Actor {
         }
         if (event.other instanceof Door) {
             console.log("the player leaves the door")
-            this.scene?.engine.noDoor();
+            this.scene.noDoor();
         }
     }
 
@@ -99,13 +97,6 @@ export class Player extends Actor {
             yspeed = 50;
         }
 
-
-        if (engine.input.keyboard.wasPressed(Keys.Space)) {
-            console.log("shoot!")
-            const bulletPos = this.pos.add(new Vector(30, 30));
-            const bullet = new Bullet(bulletPos, this.direction);
-            engine.add(bullet);
-        }
         let xspeed = xspeedLeft + xspeedRight
         this.vel = new Vector(xspeed, yspeed)
 
@@ -114,5 +105,32 @@ export class Player extends Actor {
 
         this.pos.x = clamp(this.pos.x, halfWidth, 1280 - this.width / 2)
         this.pos.y = clamp(this.pos.y, halfHeight, 720 - this.height / 2)
+
+        if (engine.input.keyboard.wasPressed(Keys.Space)) {
+            console.log("shoot!")
+            const bulletPos = this.pos.add(new Vector(30, 30));
+            const bullet = new Bullet(bulletPos, this.direction);
+            engine.add(bullet);
+        }
+
+        if (this.pos.y <= 90) {
+            this.game.goToScene("goodEnd");
+        }
     }
+}
+
+class Gun extends Actor {
+    constructor(x, y) {
+        super({ x: x, y: y, width: 10, height: 10 });
+    }
+    onInitialize() {
+        this.graphics.use(Resources.Gun.toSprite());
+    }
+    /* 
+    onPreUpdate() {
+         console.log(this.gunDirection)
+        if(this.gunDirection === -1) {
+        this.graphics.sprite.scale.x = -1;
+        }
+    }*/
 }

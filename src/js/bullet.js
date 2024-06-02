@@ -29,11 +29,12 @@ export class Bullet extends Actor {
     }
 
     onCollisionStart(event) {
-        if (event.other instanceof Enemy1) {
-            this.scene?.engine.addPoints(20);
-            event.other.kill();
+        const other = event.other;
+        if (other instanceof Enemy1) {
             this.kill();
-            this.scene?.engine.onEnemyKilled();
+            other.kill();
+            this.scene.addPoints(20);
+            this.scene.onEnemyKilled();
         }
     }
 }

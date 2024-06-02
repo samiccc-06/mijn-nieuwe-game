@@ -11,6 +11,7 @@ const Resources = {
     Ladder2: new ImageSource('images/ladder2.png'),
     Door: new ImageSource('images/door.png'),
     BackgroundStart: new ImageSource('images/background1.png'),
+    Gun: new ImageSource('images/gun.png'),
 }
 
 const ResourceLoader = new Loader()

@@ -32,6 +32,8 @@ export class Enemy1 extends Actor {
             let speed = 100 * this.speedMultiplier;
             this.vel = direction.scale(speed);
         }
-
+        if (this.pos.y <= 0) {
+            this.kill();
+        }
     }
 }
