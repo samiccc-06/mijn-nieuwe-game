@@ -27,7 +27,7 @@ export class Player extends Actor {
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.on('collisionstart', (event) => this.hitSomething(event))
         this.on('collisionend', (event) => this.leaveSomething(event));
-        const gun = new Gun(40, 30, this.gunDirection);
+        const gun = new Gun(40, 30);
         this.addChild(gun);
     }
 
@@ -115,13 +115,13 @@ export class Player extends Actor {
 
         if (this.pos.y <= 90) {
             this.game.goToScene("goodEnd");
-        }
+        } 
     }
 }
 
 class Gun extends Actor {
     constructor(x, y) {
-        super({ x: x, y: y, width: 10, height: 10 });
+        super({ x: x, y: y});
     }
     onInitialize() {
         this.graphics.use(Resources.Gun.toSprite());

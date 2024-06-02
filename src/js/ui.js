@@ -4,6 +4,7 @@ export class UI extends Actor {
 
     scoreLabel;
     livesLabel;
+    waveLabel;
 
     updateScore(score){
         this.scoreLabel.text = `score ${score}`;

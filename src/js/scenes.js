@@ -51,7 +51,12 @@ export class StartScreen extends Scene {
 }
 
 // EndScreens
+//GOOD
 export class GoodEndScreen extends Scene {
+  label;
+  label2;
+  playButton;
+
   constructor(engine) {
     super();
     this.engine = engine;
@@ -61,61 +66,14 @@ export class GoodEndScreen extends Scene {
     const background1 = new Background1()
     this.add(background1)
 
-    const playButton = new Actor({
+    this.playButton = new Actor({
       pos: new Vector(640, 400),
       width: 400,
       height: 150,
       color: Color.fromRGB(80, 255, 120),
     });
-    const label = new Label({
+    this.label = new Label({
       text: 'Play again',
-      pos: new Vector(0, 0),
-      color: Color.Black,
-      font: new Font({
-        family: 'Arial',
-        size: 50,
-        textAlign: TextAlign.Center,
-      })
-    });
-    const label2 = new Label({
-      text: `YOU WONNN!, best ${bestWave} waves`,
-      pos: label.pos.clone().sub(new Vector(0, 200)), 
-      color: Color.fromRGB(80, 255, 120),
-      font: new Font({
-        family: 'Arial',
-        size: 100,
-        textAlign: TextAlign.Center,
-      })
-    });
-    playButton.addChild(label);
-    playButton.addChild(label2);
-    playButton.on('pointerup', () => this.onPlay());
-    this.add(playButton);
-  }
-
-  onPlay() {
-    shouldResetGameScreen = true; 
-    this.engine.goToScene("game");
-  }
-}
-
-export class BadEndScreen extends Scene {
-  constructor(engine) {
-    super();
-    this.engine = engine;
-  }
-
-  onInitialize() {
-    const background1 = new Background1()
-    this.add(background1)
-
-    const playButton = new Actor({
-      pos: new Vector(640, 400),
-      width: 400,
-      height: 150,
-      color: Color.fromRGB(80, 255, 120),
-    });
-    const label = new Label({
       text: 'Try again',
       pos: new Vector(0, 0),
       color: Color.Black,
@@ -125,9 +83,19 @@ export class BadEndScreen extends Scene {
         textAlign: TextAlign.Center,
       })
     });
-    const label2 = new Label({
-      text: `YOU LOST!, best ${bestWave} waves`,
-      pos: label.pos.clone().sub(new Vector(0, 200)),
+    this.playButton.addChild(this.label);
+    this.playButton.on('pointerup', () => this.onPlay());
+    this.add(this.playButton);
+  }
+
+  onActivate(ctx) {
+    console.log('yes')
+    if (this.label2) {
+      this.playButton.removeChild(this.label2);
+    }
+    this.label2 = new Label({
+      text: `YOU WONNN!, best ${bestWave} waves`, 
+      pos: this.label.pos.clone().sub(new Vector(0, 200)),
       color: Color.fromRGB(80, 255, 120),
       font: new Font({
         family: 'Arial',
@@ -135,10 +103,67 @@ export class BadEndScreen extends Scene {
         textAlign: TextAlign.Center,
       })
     });
-    playButton.addChild(label);
-    playButton.addChild(label2);
-    playButton.on('pointerup', () => this.onPlay());
-    this.add(playButton);
+    this.playButton.addChild(this.label2);
+  }
+
+  onPlay() {
+    shouldResetGameScreen = true; 
+    this.engine.goToScene("game");
+  }
+}
+
+//BAD
+export class BadEndScreen extends Scene {
+  label;
+  label2;
+  playButton;
+
+  constructor(engine) {
+    super();
+    this.engine = engine;
+  }
+
+  onInitialize() {
+    const background1 = new Background1()
+    this.add(background1)
+
+    this.playButton = new Actor({
+      pos: new Vector(640, 400),
+      width: 400,
+      height: 150,
+      color: Color.fromRGB(80, 255, 120),
+    });
+    this.label = new Label({
+      text: 'Try again',
+      pos: new Vector(0, 0),
+      color: Color.Black,
+      font: new Font({
+        family: 'Arial',
+        size: 50,
+        textAlign: TextAlign.Center,
+      })
+    });
+    this.playButton.addChild(this.label);
+    this.playButton.on('pointerup', () => this.onPlay());
+    this.add(this.playButton);
+  }
+  
+  onActivate(ctx) {
+    console.log('yes')
+    if (this.label2) {
+      this.playButton.removeChild(this.label2);
+    }
+    this.label2 = new Label({
+      text: `YOU LOST!, best ${bestWave} waves`,
+      pos: this.label.pos.clone().sub(new Vector(0, 200)),
+      color: Color.fromRGB(80, 255, 120),
+      font: new Font({
+        family: 'Arial',
+        size: 100,
+        textAlign: TextAlign.Center,
+      })
+    });
+    this.playButton.addChild(this.label2);
   }
 
   onPlay() {
@@ -193,9 +218,10 @@ export class GameScreen extends Scene {
   addWave() {
     if (this.wave > bestWave){
       bestWave = this.wave
+      console.log(bestWave)
     }
     this.ui.updateWave(this.wave)
-  }x
+  }
 
   yesDoor() {
     this.ui.updateDoor(this.door)
