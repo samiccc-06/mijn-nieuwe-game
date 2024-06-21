@@ -27,8 +27,8 @@ export class Player extends Actor {
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.on('collisionstart', (event) => this.hitSomething(event))
         this.on('collisionend', (event) => this.leaveSomething(event));
-        const gun = new Gun(40, 30);
-        this.addChild(gun);
+        this.gun = new Gun(40, 30);
+        this.addChild(this. gun);
     }
 
     hitSomething(event) {
@@ -74,10 +74,12 @@ export class Player extends Actor {
         if (engine.input.keyboard.isHeld(Keys.Left)) {
             xspeedLeft = -150
             this.direction = new Vector(-1, 0);
+            this.turnWeapon(0);
         }
         if (engine.input.keyboard.isHeld(Keys.Right)) {
             xspeedRight = 150
             this.direction = new Vector(1, 0);
+            this.turnWeapon(1);
         }
         if (engine.input.keyboard.wasPressed(Keys.Up) && this.isOnGround) {
             yspeed = -900;
@@ -117,6 +119,20 @@ export class Player extends Actor {
             this.game.goToScene("goodEnd");
         } 
     }
+
+    turnWeapon(direction) {
+        if (direction == 1) {
+            this.gun.scale.x = 1;
+            this.gun.pos.x = 30;
+            this.gun.direction = 1;
+        }
+
+        if (direction == 0) {
+            this.gun.scale.x = -1;
+            this.gun.pos.x = 30;
+            this.gun.direction = -1;
+        }
+    }
 }
 
 class Gun extends Actor {
@@ -126,11 +142,4 @@ class Gun extends Actor {
     onInitialize() {
         this.graphics.use(Resources.Gun.toSprite());
     }
-    /* 
-    onPreUpdate() {
-         console.log(this.gunDirection)
-        if(this.gunDirection === -1) {
-        this.graphics.sprite.scale.x = -1;
-        }
-    }*/
 }
