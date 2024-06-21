@@ -1,6 +1,6 @@
 import { Actor, Vector, Keys, clamp, CollisionType, DegreeOfFreedom } from "excalibur";
 import { Resources } from './resources.js'
-import { Enemy1 } from "./enemy1.js"
+import { Enemy } from "./enemy.js"
 import { Ground1 } from "./ground1.js"
 import { Bullet } from "./bullet.js"
 import { Ladder } from "./ladder.js";
@@ -10,7 +10,7 @@ export class Player extends Actor {
 
     constructor(game, x, y) {
         super({
-            x: x, 
+            x: x,
             y: y,
             width: 90,
             height: 120
@@ -27,13 +27,13 @@ export class Player extends Actor {
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.on('collisionstart', (event) => this.hitSomething(event))
         this.on('collisionend', (event) => this.leaveSomething(event));
-        this.gun = new Gun(40, 30);
-        this.addChild(this. gun);
+        this.gun = new Gun(30, 30);
+        this.addChild(this.gun);
     }
 
     hitSomething(event) {
         const other = event.other;
-        if (other instanceof Enemy1) {
+        if (other instanceof Enemy) {
             const livesLost = 1
             this.scene.addLives(livesLost);
         }
@@ -48,7 +48,7 @@ export class Player extends Actor {
             if (this.scene.score >= this.scene.door) {
                 event.other.kill();
             } else {
-                this.scene.yesDoor();   
+                this.scene.yesDoor();
             }
         }
     }
@@ -70,7 +70,7 @@ export class Player extends Actor {
         let xspeedLeft = 0;
         let xspeedRight = 0;
         let yspeed = this.vel.y;
-        
+
         if (engine.input.keyboard.isHeld(Keys.Left)) {
             xspeedLeft = -150
             this.direction = new Vector(-1, 0);
@@ -117,7 +117,7 @@ export class Player extends Actor {
 
         if (this.pos.y <= 90) {
             this.game.goToScene("goodEnd");
-        } 
+        }
     }
 
     turnWeapon(direction) {
@@ -137,7 +137,7 @@ export class Player extends Actor {
 
 class Gun extends Actor {
     constructor(x, y) {
-        super({ x: x, y: y});
+        super({ x: x, y: y });
     }
     onInitialize() {
         this.graphics.use(Resources.Gun.toSprite());

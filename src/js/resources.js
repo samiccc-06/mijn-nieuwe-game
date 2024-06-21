@@ -4,6 +4,7 @@ import { ImageSource, Sound, Resource, Loader } from 'excalibur'
 const Resources = {
     Player1: new ImageSource('images/player1.png'),
     Enemy1: new ImageSource('images/enemy1.png'),
+    Enemy2: new ImageSource('images/enemy2.png'),
     Background1: new ImageSource('images/background1.png'),
     Level1: new ImageSource('images/level1.png'),
     Bullet: new ImageSource('images/bullet.png'),

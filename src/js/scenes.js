@@ -4,7 +4,8 @@ import { Background1 } from './background1.js'
 import { UI } from './ui.js'
 import { Ground1 } from './ground1.js'
 import { Player } from './player.js'
-import { Enemy1 } from './enemy1.js'
+import { Enemy1 } from './normal-enemy.js'
+import { Enemy2 } from './hard-enemy.js'
 import { Ladder } from './ladder.js'
 import { Level1 } from './level1.js'
 import { Door } from './door.js'
@@ -277,8 +278,15 @@ export class GameScreen extends Scene {
     this.spawnTimer += delta / 1000;
 
     if (this.enemiesToSpawn > 0 && this.spawnTimer >= 1) {
-      const enemy1 = new Enemy1(this.wave, this.player);
-      this.add(enemy1);
+      const randomNumber = Math.floor(Math.random() * 4) + 1;
+
+      if (randomNumber === 1) {
+        const enemy2 = new Enemy2(this.wave, this.player);
+        this.add(enemy2);
+      } else {
+        const enemy1 = new Enemy1(this.wave, this.player);
+        this.add(enemy1);
+      }
       this.enemiesToSpawn--;
       this.spawnTimer = 0;
     }
